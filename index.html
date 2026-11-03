@@ -10,20 +10,33 @@
   <main class="app">
     <h1>Budget Tracker</h1>
 
-    <!-- Summary: the three numbers at a glance -->
-    <section class="summary">
-      <div class="summary-item">
-        <span class="summary-label">Balance</span>
-        <span id="balance" class="summary-value">$0.00</span>
+    <!-- Circles: balance vs expenses. The bigger amount gets the bigger circle. -->
+    <section class="circles">
+      <div id="balance-circle" class="circle circle-balance">
+        <span class="circle-label">Balance</span>
+        <span id="balance" class="circle-value">$0.00</span>
       </div>
-      <div class="summary-item">
-        <span class="summary-label">Income</span>
-        <span id="total-income" class="summary-value income">$0.00</span>
+      <div id="expenses-circle" class="circle circle-expenses">
+        <span class="circle-label">Expenses</span>
+        <span id="total-expenses" class="circle-value">$0.00</span>
       </div>
-      <div class="summary-item">
-        <span class="summary-label">Expenses</span>
-        <span id="total-expenses" class="summary-value expense">$0.00</span>
+    </section>
+
+    <!-- Income: shown smaller, underneath the circles -->
+    <p class="income-line">
+      Income: <span id="total-income" class="income">$0.00</span>
+    </p>
+
+    <!-- Spending meter: a bar that fills up as expenses eat into income -->
+    <section class="meter">
+      <div class="meter-header">
+        <span class="meter-label">Spending</span>
+        <span id="meter-percent" class="meter-percent">0%</span>
       </div>
+      <div class="meter-track">
+        <div id="meter-fill" class="meter-fill"></div>
+      </div>
+      <p id="meter-message" class="meter-message"></p>
     </section>
 
     <!-- Form: how the user adds a new transaction -->

@@ -30,40 +30,134 @@ h1 {
   color: #15803d; /* money-green heading */
 }
 
-/* Summary row: three boxes side by side */
-.summary {
+/* Circles row: balance and expenses side by side, centred.
+   min-height reserves room for full-size circles so the page
+   below doesn't jump up and down as the circles change size. */
+.circles {
   display: flex;
-  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  min-height: min(180px, 40vw);
+  margin-bottom: 0.75rem;
+}
+
+/* Each circle. JavaScript sets --scale (0 to 1) on it.
+   - min(180px, 40vw): full size is 180px, or smaller on narrow phones.
+   - max(90px, ...): never shrink below 90px so the text still fits.
+   The transition animates the size change. */
+.circle {
+  --scale: 1;
+  width: max(90px, calc(var(--scale) * min(180px, 40vw)));
+  height: max(90px, calc(var(--scale) * min(180px, 40vw)));
+  border-radius: 50%; /* turns the square into a circle */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.circle-balance  { background: #16a34a; } /* green */
+.circle-expenses { background: #c0392b; } /* red */
+
+.circle-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.circle-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* The smaller income line under the circles */
+.income-line {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #52606d;
   margin-bottom: 1.5rem;
 }
 
-.summary-item {
-  flex: 1;
-  background: #f0faf3;
-  border: 1px solid #d6efdd;
-  border-radius: 8px;
-  padding: 0.75rem;
-  text-align: center;
+.income-line .income {
+  font-weight: 700;
 }
 
-.summary-label {
-  display: block;
+/* Green for money in, red for money out */
+.income { color: #0a7d2e; }
+.expense { color: #c0392b; }
+
+/* Spending meter: a grey track with a coloured bar inside it */
+.meter {
+  margin-bottom: 1.5rem;
+}
+
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+}
+
+.meter-label {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #627d98;
 }
 
-.summary-value {
-  display: block;
-  font-size: 1.1rem;
+.meter-percent {
   font-weight: 700;
-  margin-top: 0.25rem;
 }
 
-/* Green for money in, red for money out */
-.income { color: #0a7d2e; }
-.expense { color: #c0392b; }
+/* The empty "track" the bar grows inside */
+.meter-track {
+  height: 16px;
+  background: #e4e7eb;
+  border-radius: 999px; /* fully rounded ends */
+  overflow: hidden;     /* keep the bar's corners inside the track */
+}
+
+/* The bar itself. JavaScript sets its width (0%–100%).
+   "transition" makes width and colour changes animate smoothly. */
+.meter-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  transition: width 0.6s ease, background-color 0.6s ease;
+}
+
+.meter-message {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  color: #52606d;
+}
+
+/* Colour levels: JavaScript adds one of these classes to the bar and % */
+.meter-fill.low      { background-color: #16a34a; } /* green */
+.meter-fill.medium   { background-color: #f59e0b; } /* amber */
+.meter-fill.high     { background-color: #ea580c; } /* orange */
+.meter-fill.over     { background-color: #c0392b; } /* red */
+
+.meter-percent.low    { color: #15803d; }
+.meter-percent.medium { color: #b45309; }
+.meter-percent.high   { color: #c2410c; }
+.meter-percent.over   { color: #c0392b; }
+
+/* When you've overspent, gently pulse the bar to grab attention */
+.meter-fill.over {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
 
 /* The add-transaction form */
 .form {

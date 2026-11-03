@@ -16,6 +16,11 @@ const listEl = document.getElementById("transaction-list");
 const balanceEl = document.getElementById("balance");
 const incomeEl = document.getElementById("total-income");
 const expensesEl = document.getElementById("total-expenses");
+const balanceCircleEl = document.getElementById("balance-circle");
+const expensesCircleEl = document.getElementById("expenses-circle");
+const meterFillEl = document.getElementById("meter-fill");
+const meterPercentEl = document.getElementById("meter-percent");
+const meterMessageEl = document.getElementById("meter-message");
 
 // This array is our "source of truth" while the page is open.
 // We load whatever was saved last time (or start with an empty list).
@@ -80,6 +85,75 @@ function render() {
   incomeEl.textContent = formatMoney(income);
   expensesEl.textContent = formatMoney(expenses);
   balanceEl.textContent = formatMoney(income - expenses);
+
+  renderCircles(income - expenses, expenses);
+  renderMeter(income, expenses);
+}
+
+// Size the balance and expenses circles relative to each other.
+// The larger amount gets a full-size circle; the smaller one shrinks.
+function renderCircles(balance, expenses) {
+  // A negative balance can't have a "negative size", so treat it as 0.
+  const balanceSize = Math.max(balance, 0);
+  const biggest = Math.max(balanceSize, expenses);
+
+  // "scale" is a number from 0 to 1: 1 = full size, 0 = smallest size.
+  // We use the square root so the circle's AREA matches the amount —
+  // twice the money looks like twice the circle, not four times.
+  let balanceScale = 1;
+  let expensesScale = 1;
+  if (biggest > 0) {
+    balanceScale = Math.sqrt(balanceSize / biggest);
+    expensesScale = Math.sqrt(expenses / biggest);
+  }
+
+  // Hand the numbers to CSS as a custom property (--scale).
+  // style.css turns it into an actual width and height.
+  balanceCircleEl.style.setProperty("--scale", balanceScale);
+  expensesCircleEl.style.setProperty("--scale", expensesScale);
+}
+
+// Update the spending meter: how much of your income has gone to expenses.
+function renderMeter(income, expenses) {
+  // What percent of income has been spent? If there's no income yet,
+  // any expense at all counts as 100% (you're spending money you don't have).
+  let percent = 0;
+  if (income > 0) {
+    percent = (expenses / income) * 100;
+  } else if (expenses > 0) {
+    percent = 100;
+  }
+
+  // The bar can't be wider than its track, so cap the width at 100%.
+  // The CSS "transition" on .meter-fill makes the width change animate.
+  meterFillEl.style.width = Math.min(percent, 100) + "%";
+  meterPercentEl.textContent = Math.round(percent) + "%";
+
+  // Pick a colour level and a message based on how much is spent.
+  // We swap CSS classes rather than setting colours here, so all the
+  // styling stays in style.css.
+  let level;
+  let message;
+  if (income === 0 && expenses === 0) {
+    level = "low";
+    message = "Add some income to see how your spending compares.";
+  } else if (percent < 50) {
+    level = "low";
+    message = "Looking good — you've spent less than half your income.";
+  } else if (percent < 80) {
+    level = "medium";
+    message = "Heads up — more than half your income is spent.";
+  } else if (percent <= 100) {
+    level = "high";
+    message = "Careful — you're close to spending everything.";
+  } else {
+    level = "over";
+    message = "You've spent " + formatMoney(expenses - income) + " more than you earned!";
+  }
+
+  meterFillEl.className = "meter-fill " + level;
+  meterPercentEl.className = "meter-percent " + level;
+  meterMessageEl.textContent = message;
 }
 
 // Add a new transaction when the form is submitted.
