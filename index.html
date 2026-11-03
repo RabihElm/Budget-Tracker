@@ -4,9 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Budget Tracker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Budget Tracker</h1>
-  <p>Track where your money goes. Work in progress.</p>
+  <main class="app">
+    <h1>Budget Tracker</h1>
+
+    <!-- Summary: the three numbers at a glance -->
+    <section class="summary">
+      <div class="summary-item">
+        <span class="summary-label">Balance</span>
+        <span id="balance" class="summary-value">$0.00</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Income</span>
+        <span id="total-income" class="summary-value income">$0.00</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Expenses</span>
+        <span id="total-expenses" class="summary-value expense">$0.00</span>
+      </div>
+    </section>
+
+    <!-- Form: how the user adds a new transaction -->
+    <form id="transaction-form" class="form">
+      <input
+        type="text"
+        id="description"
+        placeholder="Description (e.g. Groceries)"
+        required
+      >
+      <input
+        type="number"
+        id="amount"
+        placeholder="Amount"
+        step="0.01"
+        min="0"
+        required
+      >
+      <select id="type">
+        <option value="expense">Expense</option>
+        <option value="income">Income</option>
+      </select>
+      <button type="submit">Add</button>
+    </form>
+
+    <!-- List: every transaction added shows up here -->
+    <ul id="transaction-list" class="list"></ul>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
