@@ -30,6 +30,32 @@ h1 {
   color: #15803d; /* money-green heading */
 }
 
+/* Month switcher: ‹ November 2026 › */
+.month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.month-nav h2 {
+  font-size: 1.1rem;
+}
+
+.month-nav button {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid #d6efdd;
+  border-radius: 50%;
+  background: #f0faf3;
+  color: #15803d;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.month-nav button:hover { background: #d6efdd; }
+
 /* Circles row: balance and expenses side by side, centred.
    min-height reserves room for full-size circles so the page
    below doesn't jump up and down as the circles change size. */
@@ -186,6 +212,25 @@ h1 {
 #description { flex: 1 1 100%; }
 #amount { flex: 1; }
 #type { flex: 1; }
+#date { flex: 1; }
+
+/* "Repeats every month" checkbox and its text, side by side */
+.recurring-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #52606d;
+  cursor: pointer;
+}
+
+.recurring-option input {
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  accent-color: #16a34a; /* green tick box */
+}
 
 .form button {
   flex: 1 1 100%;
@@ -200,6 +245,15 @@ h1 {
 }
 
 .form button:hover { background: #15803d; } /* darker green on hover */
+
+/* Cancel button (edit mode only): plain outline instead of solid green */
+.form .cancel-btn {
+  background: #fff;
+  color: #52606d;
+  border: 1px solid #cbd2d9;
+}
+
+.form .cancel-btn:hover { background: #f5f7fa; }
 
 /* The list of transactions */
 .list {
@@ -216,6 +270,52 @@ h1 {
 
 .list .item-amount {
   font-weight: 600;
+}
+
+/* Description on top, date (and Monthly tag) underneath */
+.item-info {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto; /* push the amount and × to the right */
+}
+
+.item-meta {
+  font-size: 0.8rem;
+  color: #829ab1;
+}
+
+.tag {
+  margin-left: 0.25rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: #f0faf3;
+  color: #15803d;
+}
+
+/* The row currently loaded into the form for editing */
+.list li.editing {
+  background: #f0faf3;
+  border-radius: 6px;
+}
+
+/* The little edit (pencil) button on each row */
+.edit-btn {
+  margin-left: 0.75rem;
+  border: none;
+  background: transparent;
+  color: #9aa5b1;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.edit-btn:hover { color: #15803d; }
+
+/* Shown when a month has no transactions */
+.list li.empty {
+  justify-content: center;
+  color: #9aa5b1;
+  border-bottom: none;
 }
 
 /* The little delete button on each row */

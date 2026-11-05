@@ -10,6 +10,13 @@
   <main class="app">
     <h1>Budget Tracker</h1>
 
+    <!-- Month switcher: everything below shows only the month in the middle -->
+    <nav class="month-nav">
+      <button type="button" id="prev-month" aria-label="Previous month">&lsaquo;</button>
+      <h2 id="month-label"></h2>
+      <button type="button" id="next-month" aria-label="Next month">&rsaquo;</button>
+    </nav>
+
     <!-- Circles: balance vs expenses. The bigger amount gets the bigger circle. -->
     <section class="circles">
       <div id="balance-circle" class="circle circle-balance">
@@ -59,7 +66,14 @@
         <option value="expense">Expense</option>
         <option value="income">Income</option>
       </select>
-      <button type="submit">Add</button>
+      <input type="date" id="date" required>
+      <label class="recurring-option">
+        <input type="checkbox" id="recurring">
+        Repeats every month
+      </label>
+      <button type="submit" id="submit-btn">Add</button>
+      <!-- Only shown while editing ("hidden" hides it until JS removes it) -->
+      <button type="button" id="cancel-edit" class="cancel-btn" hidden>Cancel</button>
     </form>
 
     <!-- List: every transaction added shows up here -->
